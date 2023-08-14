@@ -15,7 +15,8 @@ import java.util.Collection;
 @Builder
 public class Account {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private double balance;
     @Enumerated(EnumType.STRING)
     private AccountStatus status;

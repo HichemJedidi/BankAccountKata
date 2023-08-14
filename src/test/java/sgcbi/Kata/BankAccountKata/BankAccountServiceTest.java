@@ -37,7 +37,7 @@ public class BankAccountServiceTest {
     @Before
     public void setUp(){
         account = Account.builder()
-                .id("12343")
+                .id(12343L)
                 .balance(1000)
                 .currency("EUR")
                 .status(AccountStatus.CREATED)
@@ -57,27 +57,27 @@ public class BankAccountServiceTest {
     @Test
     public void printStatement_should_successfully_return_current_account_balance() throws NoSuchAccountException {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.of(account));
-        AccountDTO accountDto = bankAccountService.printStatement("12343");
+        AccountDTO accountDto = bankAccountService.printStatement(12343L);
         Assertions.assertThat(accountDto.getBalance()).isEqualTo(account.getBalance());
     }
 
     @Test(expected = NoSuchAccountException.class)
     public void printStatement_should_throw_exception_for_no_such_account() throws NoSuchAccountException {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.empty());
-        bankAccountService.printStatement("12343");
+        bankAccountService.printStatement(12343L);
         Assert.fail("should have thrown NoSuchAccountException ");
     }
     @Test
     public void listAllOperations_should_successfully_return_all_account_operations() throws NoSuchAccountException {
         when(bankAccountRepository.findById("12343")).thenReturn(Optional.of(account));
-        List<OperationDTO> operations = bankAccountService.listAllOperations("12343");
+        List<OperationDTO> operations = bankAccountService.listAllOperations(12343L);
         Assertions.assertThat(operations).isNotEmpty();
         assertEquals(operations.size(), account.getOperations().size());
     }
     @Test(expected = NoSuchAccountException.class)
     public void listAllOperations_should_throw_exception_for_no_such_account() throws NoSuchAccountException {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.empty());
-        bankAccountService.listAllOperations("12343");
+        bankAccountService.listAllOperations(12343L);
         Assert.fail("should have thrown NoSuchAccountException ");
     }
 }

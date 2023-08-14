@@ -46,14 +46,14 @@ public class OperationServiceTest {
     public void setUp(){
         account = new Account();
         account.setBalance(5000);
-        account.setId("123");
+        account.setId(123L);
         operation = new Operation(12L,Instant.now(),1000,OperationType.DEPOSIT,account);
     }
 
     @Test(expected = NoSuchAccountException.class)
     public void createAndPerformOperation_should_throw_NoSuchAccountException() throws NoSuchAccountException {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.empty());
-        operationService.createAndPerformOperation("123",0,OperationType.WITHDRAW);
+        operationService.createAndPerformOperation(123L,0,OperationType.WITHDRAW);
         Assert.fail("should have thrown NoSuchAccountException ");
 
     }
@@ -62,7 +62,7 @@ public class OperationServiceTest {
     public void createAndPerformOperation_should_perform_deposit() throws NoSuchAccountException {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.of(account));
         double currentAccountBalance = account.getBalance();
-        OperationDTO operation = operationService.createAndPerformOperation("123",1000,OperationType.DEPOSIT);
+        OperationDTO operation = operationService.createAndPerformOperation(123L,1000,OperationType.DEPOSIT);
         Assertions.assertThat(operation.getAmount()).isEqualTo(1000);
         Assertions.assertThat(operation.getType()).isEqualTo(OperationType.DEPOSIT);
         Assertions.assertThat(operation.getAccount()).isNotNull();
@@ -73,7 +73,7 @@ public class OperationServiceTest {
     public void createAndPerformOperation_should_perform_withdrawal() throws NoSuchAccountException {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.of(account));
         double currentAccountBalance = account.getBalance();
-        OperationDTO operation = operationService.createAndPerformOperation("123",5000,OperationType.WITHDRAW);
+        OperationDTO operation = operationService.createAndPerformOperation(123L,5000,OperationType.WITHDRAW);
         Assertions.assertThat(operation.getAmount()).isEqualTo(-5000);
         Assertions.assertThat(operation.getType()).isEqualTo(OperationType.WITHDRAW);
         Assertions.assertThat(operation.getAccount()).isNotNull();
@@ -83,7 +83,7 @@ public class OperationServiceTest {
     @Test(expected = NoSuchAccountException.class)
     public void doDeposit_should_throw_NoSuchAccountException() throws NoSuchAccountException {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.empty());
-        operationService.deposit("123",1200);
+        operationService.deposit(123L,1200);
         Assert.fail("should have thrown NoSuchAccountException ");
     }
 
@@ -93,7 +93,7 @@ public class OperationServiceTest {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.of(account));
         when(operationRepository.save(any(Operation.class))).thenReturn(operation);
         double currentAccountBalance = account.getBalance();
-        AccountDTO dto = operationService.deposit("123",1200);
+        AccountDTO dto = operationService.deposit(123L,1200);
         assertTrue(dto.getOperations().contains(operation));
         Assertions.assertThat(dto.getBalance()).isEqualTo(currentAccountBalance+1200);
     }
@@ -101,7 +101,7 @@ public class OperationServiceTest {
     @Test(expected = NoSuchAccountException.class)
     public void doWithdraw_should_throw_NoSuchAccountException() throws NoSuchAccountException {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.empty());
-        operationService.withdraw("123",1200);
+        operationService.withdraw(123L,1200);
         Assert.fail("should have thrown NoSuchAccountException ");
     }
 
@@ -110,7 +110,7 @@ public class OperationServiceTest {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.of(account));
         when(operationRepository.save(any(Operation.class))).thenReturn(operation);
         double currentAccountBalance = account.getBalance();
-        AccountDTO dto = operationService.withdraw("123",1200);
+        AccountDTO dto = operationService.withdraw(123L,1200);
         assertTrue(dto.getOperations().contains(operation));
         Assertions.assertThat(dto.getBalance()).isEqualTo(currentAccountBalance-1200);
     }
@@ -118,18 +118,18 @@ public class OperationServiceTest {
     public void testDoDepositWithInsufficientBalance() throws BalanceNotSufficentExeption {
 
         when(bankAccountRepository.findById("123")).thenReturn(Optional.of(account));
-        assertThrows(BalanceNotSufficentExeption.class, () -> operationService.deposit("123", 500000));
+        assertThrows(BalanceNotSufficentExeption.class, () -> operationService.deposit(123L, 500000));
     }
     @Test
     public void testNegativeAmountDoDeposit() throws AmountNegativeExeption {
 
         when(bankAccountRepository.findById("123")).thenReturn(Optional.of(account));
-        assertThrows(AmountNegativeExeption.class, () -> operationService.deposit("123", -100));
+        assertThrows(AmountNegativeExeption.class, () -> operationService.deposit(123L, -100));
     }
     @Test
     public void testNegativeAmountDoWithdraw() throws AmountNegativeExeption {
 
         when(bankAccountRepository.findById("123")).thenReturn(Optional.of(account));
-        assertThrows(AmountNegativeExeption.class, () -> operationService.withdraw("123", -100));
+        assertThrows(AmountNegativeExeption.class, () -> operationService.withdraw(123L, -100));
     }
 }

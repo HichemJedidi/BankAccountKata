@@ -31,15 +31,15 @@ public class OperationServices {
     private final Semaphore withdrawSemaphore = new Semaphore(1);
 
 
-    public AccountDTO deposit(String accountId, double amount) throws NoSuchAccountException{
+    public AccountDTO deposit(Long accountId, double amount) throws NoSuchAccountException{
 
         try {
             depositSemaphore.acquire();
         OperationDTO operationDTO = createAndPerformOperation(accountId,amount, OperationType.DEPOSIT);
-        if(!bankAccountRepository.findById(accountId).isEmpty()){
+        if(!bankAccountRepository.findById(String.valueOf(accountId)).isEmpty()){
             throw new NoSuchAccountException(": "+accountId);
         }
-        Account bankAccount = bankAccountRepository.findById(accountId).get();
+        Account bankAccount = bankAccountRepository.findById(String.valueOf(accountId)).get();
 
         bankAccount.getOperations().add(ObjectMapper.map(operationDTO, Operation.class));
         return ObjectMapper.map(bankAccount,AccountDTO.class);
@@ -50,15 +50,15 @@ public class OperationServices {
             depositSemaphore.release();
         }
     }
-    public AccountDTO withdraw(String accountId, double amount) throws NoSuchAccountException{
+    public AccountDTO withdraw(Long accountId, double amount) throws NoSuchAccountException{
 
         try {
             withdrawSemaphore.acquire();
         OperationDTO operationDTO = createAndPerformOperation(accountId,amount,OperationType.WITHDRAW);
-        if(!bankAccountRepository.findById(accountId).isEmpty()){
+        if(!bankAccountRepository.findById(String.valueOf(accountId)).isEmpty()){
             throw new NoSuchAccountException(": "+accountId);
         }
-        Account bankAccount = bankAccountRepository.findById(accountId).get();
+        Account bankAccount = bankAccountRepository.findById(String.valueOf(accountId)).get();
         bankAccount.getOperations().add(ObjectMapper.map(operationDTO,Operation.class));
         return ObjectMapper.map(bankAccount,AccountDTO.class);
         }  catch (InterruptedException e) {
@@ -68,8 +68,8 @@ public class OperationServices {
             withdrawSemaphore.release();
         }
     }
-    public OperationDTO createAndPerformOperation(String accountId, double amount, OperationType operationType) throws NoSuchAccountException {
-        Optional<Account> optionalBankAccount = bankAccountRepository.findById(accountId);
+    public OperationDTO createAndPerformOperation(Long accountId, double amount, OperationType operationType) throws NoSuchAccountException {
+        Optional<Account> optionalBankAccount = bankAccountRepository.findById(String.valueOf(accountId));
         if(!optionalBankAccount.isEmpty()){
             throw new NoSuchAccountException(": "+accountId);
         }

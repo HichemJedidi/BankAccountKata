@@ -22,13 +22,13 @@ public class BankAccountController {
     private final BankAccountService bankAccountService;
     private final OperationServices operationService;
     @PostMapping("/createAccount")
-    public ResponseEntity<AccountDTO> createAccount(@Valid @RequestBody AccountDTO accountDTO) throws NoSuchAccountException {
+    public ResponseEntity<AccountDTO> createAccount( @RequestBody AccountDTO accountDTO) throws NoSuchAccountException {
         AccountDTO result = bankAccountService.createAccount(accountDTO);
-        bankAccountService.activateAccount(accountDTO.getId());
+      //  bankAccountService.activateAccount(accountDTO.getId());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     @GetMapping("/{accountId}")
-    public AccountDTO printAccountState(@PathVariable String accountId) throws NoSuchAccountException {
+    public AccountDTO printAccountState(@PathVariable Long accountId) throws NoSuchAccountException {
         return bankAccountService.printStatement(accountId);
     }
     @GetMapping("/AllAccounts")
@@ -36,7 +36,7 @@ public class BankAccountController {
         return bankAccountService.getAllAccounts();
     }
     @GetMapping("{accountId}/history")
-    public List<OperationDTO> showOperationsList(@PathVariable String accountId) throws NoSuchAccountException {
+    public List<OperationDTO> showOperationsList(@PathVariable Long accountId) throws NoSuchAccountException {
         return bankAccountService.listAllOperations(accountId);
     }
     @ExceptionHandler(Exception.class)
@@ -48,7 +48,7 @@ public class BankAccountController {
         return entity;
     }
     @PutMapping(path = "/deposit")
-    public ResponseEntity<AccountDTO> depositMoney(@RequestParam String accountId, @RequestParam double amount){
+    public ResponseEntity<AccountDTO> depositMoney(@RequestParam Long accountId, @RequestParam double amount){
 
         try {
             AccountDTO updatedAccount = operationService.deposit(accountId, amount);
@@ -59,7 +59,7 @@ public class BankAccountController {
 
     }
     @PutMapping(path = "/withdraw")
-    public ResponseEntity<AccountDTO> withdrawMoney(@RequestParam String accountId, @RequestParam double amount){
+    public ResponseEntity<AccountDTO> withdrawMoney(@RequestParam Long accountId, @RequestParam double amount){
 
         try {
             AccountDTO updatedAccount = operationService.withdraw(accountId, amount);

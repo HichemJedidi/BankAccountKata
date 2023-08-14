@@ -26,7 +26,7 @@ public class BankAccountService {
     public AccountDTO createAccount(AccountDTO accountDTO){
         Account account = ObjectMapper.map(accountDTO, Account.class);
         account.setStatus(AccountStatus.CREATED);
-        account.setId( UUID.randomUUID().toString());
+
         return ObjectMapper.map(bankAccountRepository.save(account), AccountDTO.class);
 
     }
@@ -54,16 +54,16 @@ public class BankAccountService {
 
         bankAccountRepository.save(account);
     }
-    public AccountDTO printStatement(String accountId) throws NoSuchAccountException {
-        Optional<Account> optionalBankAccount = bankAccountRepository.findById(accountId);
+    public AccountDTO printStatement(Long accountId) throws NoSuchAccountException {
+        Optional<Account> optionalBankAccount = bankAccountRepository.findById(String.valueOf(accountId));
         if(!optionalBankAccount.isEmpty()){
             throw new NoSuchAccountException(": "+accountId);
         }
         return ObjectMapper.map(optionalBankAccount.get(),AccountDTO.class);
     }
 
-    public List<OperationDTO> listAllOperations(String accountId) throws NoSuchAccountException {
-        Optional<Account> optionalBankAccount = bankAccountRepository.findById(accountId);
+    public List<OperationDTO> listAllOperations(Long accountId) throws NoSuchAccountException {
+        Optional<Account> optionalBankAccount = bankAccountRepository.findById(String.valueOf(accountId));
         if(!optionalBankAccount.isEmpty()){
             throw new NoSuchAccountException(": "+accountId);
         }
