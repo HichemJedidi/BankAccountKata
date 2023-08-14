@@ -56,6 +56,11 @@
 				<version>3.24.2</version> <!-- Remplacez x.x par la version actuelle -->
 				<scope>test</scope>
 			</dependency>
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>2.1.0</version>
+		</dependency>
 
 	</dependencies>
 

@@ -1,6 +1,7 @@
 package sgcbi.Kata.BankAccountKata;
 
 import dtos.AccountDTO;
+import dtos.OperationDTO;
 import entities.Account;
 import entities.Operation;
 import enums.OperationType;
@@ -62,7 +63,7 @@ public class OperationServiceTest {
     public void createAndPerformOperation_should_perform_deposit() throws NoSuchAccountException {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.of(account));
         double currentAccountBalance = account.getBalance();
-        Operation operation = operationService.createAndPerformOperation("123",1000,OperationType.DEPOSIT);
+        OperationDTO operation = operationService.createAndPerformOperation("123",1000,OperationType.DEPOSIT);
         Assertions.assertThat(operation.getAmount()).isEqualTo(1000);
         Assertions.assertThat(operation.getType()).isEqualTo(OperationType.DEPOSIT);
         Assertions.assertThat(operation.getAccount()).isNotNull();
@@ -73,7 +74,7 @@ public class OperationServiceTest {
     public void createAndPerformOperation_should_perform_withdrawal() throws NoSuchAccountException {
         when(bankAccountRepository.findById(anyString())).thenReturn(Optional.of(account));
         double currentAccountBalance = account.getBalance();
-        Operation operation = operationService.createAndPerformOperation("123",5000,OperationType.WITHDRAW);
+        OperationDTO operation = operationService.createAndPerformOperation("123",5000,OperationType.WITHDRAW);
         Assertions.assertThat(operation.getAmount()).isEqualTo(-5000);
         Assertions.assertThat(operation.getType()).isEqualTo(OperationType.WITHDRAW);
         Assertions.assertThat(operation.getAccount()).isNotNull();
