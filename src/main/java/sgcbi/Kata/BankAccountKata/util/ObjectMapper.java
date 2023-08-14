@@ -1,4 +1,4 @@
-package util;
+package sgcbi.Kata.BankAccountKata.util;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;

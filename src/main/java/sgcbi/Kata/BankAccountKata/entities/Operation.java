@@ -1,7 +1,7 @@
-package entities;
+package sgcbi.Kata.BankAccountKata.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import enums.OperationType;
+import sgcbi.Kata.BankAccountKata.enums.OperationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

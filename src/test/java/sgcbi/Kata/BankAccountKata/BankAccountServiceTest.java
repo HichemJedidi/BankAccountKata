@@ -1,24 +1,22 @@
 package sgcbi.Kata.BankAccountKata;
 
-import dtos.AccountDTO;
-import dtos.OperationDTO;
-import entities.Account;
-import entities.Operation;
-import enums.AccountStatus;
-import enums.OperationType;
-import exeptions.NoSuchAccountException;
-import lombok.Builder;
+import sgcbi.Kata.BankAccountKata.dtos.AccountDTO;
+import sgcbi.Kata.BankAccountKata.dtos.OperationDTO;
+import sgcbi.Kata.BankAccountKata.entities.Account;
+import sgcbi.Kata.BankAccountKata.entities.Operation;
+import sgcbi.Kata.BankAccountKata.enums.AccountStatus;
+import sgcbi.Kata.BankAccountKata.enums.OperationType;
+import sgcbi.Kata.BankAccountKata.exeptions.NoSuchAccountException;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.junit.Before;
-import repositories.BankAccountRepository;
-import services.BankAccountService;
+import sgcbi.Kata.BankAccountKata.repositories.BankAccountRepository;
+import sgcbi.Kata.BankAccountKata.services.BankAccountService;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 

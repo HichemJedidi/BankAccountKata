@@ -1,6 +1,6 @@
-package entities;
+package sgcbi.Kata.BankAccountKata.entities;
 
-import enums.AccountStatus;
+import sgcbi.Kata.BankAccountKata.enums.AccountStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

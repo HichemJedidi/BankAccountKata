@@ -1,4 +1,4 @@
-package exeptions;
+package sgcbi.Kata.BankAccountKata.exeptions;
 
 public class NoSuchAccountException extends Exception {
 

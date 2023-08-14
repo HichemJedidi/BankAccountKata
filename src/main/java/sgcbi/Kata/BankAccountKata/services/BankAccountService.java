@@ -1,21 +1,21 @@
-package services;
+package sgcbi.Kata.BankAccountKata.services;
 
-import dtos.AccountDTO;
-import dtos.OperationDTO;
-import entities.Account;
-import entities.Operation;
-import enums.AccountStatus;
-import exeptions.NoSuchAccountException;
+import sgcbi.Kata.BankAccountKata.dtos.AccountDTO;
+import sgcbi.Kata.BankAccountKata.dtos.OperationDTO;
+import sgcbi.Kata.BankAccountKata.entities.Account;
+import sgcbi.Kata.BankAccountKata.entities.Operation;
+import sgcbi.Kata.BankAccountKata.enums.AccountStatus;
+import sgcbi.Kata.BankAccountKata.exeptions.NoSuchAccountException;
 import lombok.AllArgsConstructor;
-import net.bytebuddy.asm.Advice;
 import org.springframework.stereotype.Service;
-import repositories.BankAccountRepository;
-import util.ObjectMapper;
+import sgcbi.Kata.BankAccountKata.repositories.BankAccountRepository;
+import sgcbi.Kata.BankAccountKata.util.ObjectMapper;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -25,6 +25,8 @@ public class BankAccountService {
 
     public AccountDTO createAccount(AccountDTO accountDTO){
         Account account = ObjectMapper.map(accountDTO, Account.class);
+        account.setStatus(AccountStatus.CREATED);
+        account.setId( UUID.randomUUID().toString());
         return ObjectMapper.map(bankAccountRepository.save(account), AccountDTO.class);
 
     }

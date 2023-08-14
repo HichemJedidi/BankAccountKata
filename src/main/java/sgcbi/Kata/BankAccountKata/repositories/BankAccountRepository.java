@@ -1,6 +1,6 @@
-package repositories;
+package sgcbi.Kata.BankAccountKata.repositories;
 
-import entities.Account;
+import sgcbi.Kata.BankAccountKata.entities.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

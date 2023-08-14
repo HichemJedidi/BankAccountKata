@@ -1,7 +1,7 @@
-package dtos;
+package sgcbi.Kata.BankAccountKata.dtos;
 
-import entities.Operation;
-import enums.AccountStatus;
+import sgcbi.Kata.BankAccountKata.entities.Operation;
+import sgcbi.Kata.BankAccountKata.enums.AccountStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

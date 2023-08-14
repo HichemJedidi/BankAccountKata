@@ -1,22 +1,21 @@
 package sgcbi.Kata.BankAccountKata;
 
-import dtos.AccountDTO;
-import dtos.OperationDTO;
-import entities.Account;
-import entities.Operation;
-import enums.OperationType;
-import exeptions.AmountNegativeExeption;
-import exeptions.BalanceNotSufficentExeption;
-import exeptions.NoSuchAccountException;
+import sgcbi.Kata.BankAccountKata.dtos.AccountDTO;
+import sgcbi.Kata.BankAccountKata.dtos.OperationDTO;
+import sgcbi.Kata.BankAccountKata.entities.Account;
+import sgcbi.Kata.BankAccountKata.entities.Operation;
+import sgcbi.Kata.BankAccountKata.enums.OperationType;
+import sgcbi.Kata.BankAccountKata.exeptions.AmountNegativeExeption;
+import sgcbi.Kata.BankAccountKata.exeptions.BalanceNotSufficentExeption;
+import sgcbi.Kata.BankAccountKata.exeptions.NoSuchAccountException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
-import repositories.BankAccountRepository;
-import repositories.OperationRepository;
-import services.OperationServices;
+import sgcbi.Kata.BankAccountKata.repositories.BankAccountRepository;
+import sgcbi.Kata.BankAccountKata.repositories.OperationRepository;
+import sgcbi.Kata.BankAccountKata.services.OperationServices;
 
 import java.time.Instant;
 import java.util.Optional;

@@ -1,19 +1,19 @@
-package services;
+package sgcbi.Kata.BankAccountKata.services;
 
-import dtos.AccountDTO;
-import dtos.OperationDTO;
-import entities.Account;
-import entities.Operation;
-import enums.OperationType;
-import exeptions.AmountNegativeExeption;
-import exeptions.BalanceNotSufficentExeption;
-import exeptions.NoSuchAccountException;
+import sgcbi.Kata.BankAccountKata.dtos.AccountDTO;
+import sgcbi.Kata.BankAccountKata.dtos.OperationDTO;
+import sgcbi.Kata.BankAccountKata.entities.Account;
+import sgcbi.Kata.BankAccountKata.entities.Operation;
+import sgcbi.Kata.BankAccountKata.enums.OperationType;
+import sgcbi.Kata.BankAccountKata.exeptions.AmountNegativeExeption;
+import sgcbi.Kata.BankAccountKata.exeptions.BalanceNotSufficentExeption;
+import sgcbi.Kata.BankAccountKata.exeptions.NoSuchAccountException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import repositories.BankAccountRepository;
-import repositories.OperationRepository;
-import util.ObjectMapper;
+import sgcbi.Kata.BankAccountKata.repositories.BankAccountRepository;
+import sgcbi.Kata.BankAccountKata.repositories.OperationRepository;
+import sgcbi.Kata.BankAccountKata.util.ObjectMapper;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -31,17 +31,17 @@ public class OperationServices {
     private final Semaphore withdrawSemaphore = new Semaphore(1);
 
 
-    public AccountDTO deposit(String accountId, long amount) throws NoSuchAccountException{
+    public AccountDTO deposit(String accountId, double amount) throws NoSuchAccountException{
 
         try {
             depositSemaphore.acquire();
-        OperationDTO operationDTO = createAndPerformOperation(accountId,amount,OperationType.DEPOSIT);
+        OperationDTO operationDTO = createAndPerformOperation(accountId,amount, OperationType.DEPOSIT);
         if(!bankAccountRepository.findById(accountId).isEmpty()){
             throw new NoSuchAccountException(": "+accountId);
         }
         Account bankAccount = bankAccountRepository.findById(accountId).get();
 
-        bankAccount.getOperations().add(ObjectMapper.map(operationDTO,Operation.class));
+        bankAccount.getOperations().add(ObjectMapper.map(operationDTO, Operation.class));
         return ObjectMapper.map(bankAccount,AccountDTO.class);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Rétablit le statut d'interruption
@@ -50,7 +50,7 @@ public class OperationServices {
             depositSemaphore.release();
         }
     }
-    public AccountDTO withdraw(String accountId, long amount) throws NoSuchAccountException{
+    public AccountDTO withdraw(String accountId, double amount) throws NoSuchAccountException{
 
         try {
             withdrawSemaphore.acquire();
@@ -68,7 +68,7 @@ public class OperationServices {
             withdrawSemaphore.release();
         }
     }
-    public OperationDTO createAndPerformOperation(String accountId, long amount, OperationType operationType) throws NoSuchAccountException {
+    public OperationDTO createAndPerformOperation(String accountId, double amount, OperationType operationType) throws NoSuchAccountException {
         Optional<Account> optionalBankAccount = bankAccountRepository.findById(accountId);
         if(!optionalBankAccount.isEmpty()){
             throw new NoSuchAccountException(": "+accountId);
