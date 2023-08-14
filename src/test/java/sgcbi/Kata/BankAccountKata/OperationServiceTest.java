@@ -4,6 +4,8 @@ import dtos.AccountDTO;
 import entities.Account;
 import entities.Operation;
 import enums.OperationType;
+import exeptions.AmountNegativeExeption;
+import exeptions.BalanceNotSufficentExeption;
 import exeptions.NoSuchAccountException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -20,6 +22,8 @@ import java.util.Optional;
 
 
 import org.assertj.core.api.Assertions;
+
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
@@ -109,5 +113,23 @@ public class OperationServiceTest {
         AccountDTO dto = operationService.withdraw("123",1200);
         assertTrue(dto.getOperations().contains(operation));
         Assertions.assertThat(dto.getBalance()).isEqualTo(currentAccountBalance-1200);
+    }
+    @Test
+    public void testDoDepositWithInsufficientBalance() throws BalanceNotSufficentExeption {
+
+        when(bankAccountRepository.findById("123")).thenReturn(Optional.of(account));
+        assertThrows(BalanceNotSufficentExeption.class, () -> operationService.deposit("123", 500000));
+    }
+    @Test
+    public void testNegativeAmountDoDeposit() throws AmountNegativeExeption {
+
+        when(bankAccountRepository.findById("123")).thenReturn(Optional.of(account));
+        assertThrows(AmountNegativeExeption.class, () -> operationService.deposit("123", -100));
+    }
+    @Test
+    public void testNegativeAmountDoWithdraw() throws AmountNegativeExeption {
+
+        when(bankAccountRepository.findById("123")).thenReturn(Optional.of(account));
+        assertThrows(AmountNegativeExeption.class, () -> operationService.withdraw("123", -100));
     }
 }
