@@ -1,9 +1,9 @@
 package repositories;
 
-import entities.Account;
+import entities.Operation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BankAccountRepository extends JpaRepository<Account,String> {
+public interface OperationRepository extends JpaRepository<Operation,Long> {
 }
