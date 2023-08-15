@@ -15,7 +15,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+
 
 @Service
 @Transactional
@@ -42,10 +42,10 @@ public class BankAccountService {
 
 
     }
-    public void activateAccount(String accountId) throws NoSuchAccountException {
+    public void activateAccount(Long accountId) throws NoSuchAccountException {
         Optional<Account> optionalAccount = bankAccountRepository.findById(accountId);
 
-        if (!optionalAccount.isEmpty()) {
+        if (!optionalAccount.isPresent()) {
             throw new NoSuchAccountException(": " + accountId);
         }
 
@@ -55,19 +55,20 @@ public class BankAccountService {
         bankAccountRepository.save(account);
     }
     public AccountDTO printStatement(Long accountId) throws NoSuchAccountException {
-        Optional<Account> optionalBankAccount = bankAccountRepository.findById(String.valueOf(accountId));
-        if(!optionalBankAccount.isEmpty()){
+        Optional<Account> optionalBankAccount = bankAccountRepository.findById(accountId);
+        if(!optionalBankAccount.isPresent()){
             throw new NoSuchAccountException(": "+accountId);
         }
         return ObjectMapper.map(optionalBankAccount.get(),AccountDTO.class);
     }
 
     public List<OperationDTO> listAllOperations(Long accountId) throws NoSuchAccountException {
-        Optional<Account> optionalBankAccount = bankAccountRepository.findById(String.valueOf(accountId));
-        if(!optionalBankAccount.isEmpty()){
+        Optional<Account> optionalBankAccount = bankAccountRepository.findById(accountId);
+        if(!optionalBankAccount.isPresent()){
             throw new NoSuchAccountException(": "+accountId);
         }
-        List<OperationDTO> operationDTOs = null;
+        List<OperationDTO> operationDTOs =  new ArrayList<>();
+
         for (Operation operation : optionalBankAccount.get().getOperations()) {
             OperationDTO operationDTO = ObjectMapper.map(operation, OperationDTO.class);
             operationDTOs.add(operationDTO);

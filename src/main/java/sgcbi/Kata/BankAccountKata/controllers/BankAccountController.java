@@ -24,7 +24,7 @@ public class BankAccountController {
     @PostMapping("/createAccount")
     public ResponseEntity<AccountDTO> createAccount( @RequestBody AccountDTO accountDTO) throws NoSuchAccountException {
         AccountDTO result = bankAccountService.createAccount(accountDTO);
-      //  bankAccountService.activateAccount(accountDTO.getId());
+        bankAccountService.activateAccount(result.getId());
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
     @GetMapping("/{accountId}")

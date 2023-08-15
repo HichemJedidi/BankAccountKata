@@ -10,7 +10,7 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor@AllArgsConstructor
 public class AccountDTO {
-    private String id;
+    private Long id;
     private double balance;
     private AccountStatus status;
     private String currency;

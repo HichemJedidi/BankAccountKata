@@ -36,10 +36,10 @@ public class OperationServices {
         try {
             depositSemaphore.acquire();
         OperationDTO operationDTO = createAndPerformOperation(accountId,amount, OperationType.DEPOSIT);
-        if(!bankAccountRepository.findById(String.valueOf(accountId)).isEmpty()){
+        if(!bankAccountRepository.findById(accountId).isPresent()){
             throw new NoSuchAccountException(": "+accountId);
         }
-        Account bankAccount = bankAccountRepository.findById(String.valueOf(accountId)).get();
+        Account bankAccount = bankAccountRepository.findById(accountId).get();
 
         bankAccount.getOperations().add(ObjectMapper.map(operationDTO, Operation.class));
         return ObjectMapper.map(bankAccount,AccountDTO.class);
@@ -55,10 +55,10 @@ public class OperationServices {
         try {
             withdrawSemaphore.acquire();
         OperationDTO operationDTO = createAndPerformOperation(accountId,amount,OperationType.WITHDRAW);
-        if(!bankAccountRepository.findById(String.valueOf(accountId)).isEmpty()){
+        if(!bankAccountRepository.findById(accountId).isPresent()){
             throw new NoSuchAccountException(": "+accountId);
         }
-        Account bankAccount = bankAccountRepository.findById(String.valueOf(accountId)).get();
+        Account bankAccount = bankAccountRepository.findById(accountId).get();
         bankAccount.getOperations().add(ObjectMapper.map(operationDTO,Operation.class));
         return ObjectMapper.map(bankAccount,AccountDTO.class);
         }  catch (InterruptedException e) {
@@ -69,8 +69,8 @@ public class OperationServices {
         }
     }
     public OperationDTO createAndPerformOperation(Long accountId, double amount, OperationType operationType) throws NoSuchAccountException {
-        Optional<Account> optionalBankAccount = bankAccountRepository.findById(String.valueOf(accountId));
-        if(!optionalBankAccount.isEmpty()){
+        Optional<Account> optionalBankAccount = bankAccountRepository.findById(accountId);
+        if(!optionalBankAccount.isPresent()){
             throw new NoSuchAccountException(": "+accountId);
         }
         Account account = optionalBankAccount.get();

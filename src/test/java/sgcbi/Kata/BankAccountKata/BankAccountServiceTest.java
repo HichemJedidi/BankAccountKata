@@ -1,5 +1,9 @@
 package sgcbi.Kata.BankAccountKata;
 
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import sgcbi.Kata.BankAccountKata.dtos.AccountDTO;
 import sgcbi.Kata.BankAccountKata.dtos.OperationDTO;
 import sgcbi.Kata.BankAccountKata.entities.Account;
@@ -22,13 +26,19 @@ import java.util.Optional;
 
 
 import org.assertj.core.api.Assertions;
+import sgcbi.Kata.BankAccountKata.util.ObjectMapper;
+
+import javax.validation.constraints.Null;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
-
+@RunWith(MockitoJUnitRunner.class)
 public class BankAccountServiceTest {
     @Spy
+    @InjectMocks()
     private BankAccountService bankAccountService;
+
     @Mock
     private BankAccountRepository bankAccountRepository;
 
@@ -36,12 +46,13 @@ public class BankAccountServiceTest {
     private Account account ;
     @Before
     public void setUp(){
+
         account = Account.builder()
                 .id(12343L)
                 .balance(1000)
                 .currency("EUR")
                 .status(AccountStatus.CREATED)
-                .operations(anyList()).build();
+                .operations(null).build();
 
         operations  = new ArrayList<>();
         operations.add(new Operation(12L,Instant.now(),10000,OperationType.DEPOSIT,account));
@@ -50,33 +61,33 @@ public class BankAccountServiceTest {
     @Test
     public void TestAccountCreation(){
         when(bankAccountRepository.save(any())).thenReturn(account);
-        Assert.assertNotNull(bankAccountService.createAccount(new AccountDTO()));
-        assertEquals("12343", (bankAccountService.createAccount(new AccountDTO())).getId());
+        Assert.assertNotNull(bankAccountService.createAccount(ObjectMapper.map(account,AccountDTO.class)));
+        assertEquals(12343L, (bankAccountService.createAccount(new AccountDTO())).getId());
 
     }
     @Test
     public void printStatement_should_successfully_return_current_account_balance() throws NoSuchAccountException {
-        when(bankAccountRepository.findById(anyString())).thenReturn(Optional.of(account));
+        when(bankAccountRepository.findById(anyLong())).thenReturn(Optional.of(account));
         AccountDTO accountDto = bankAccountService.printStatement(12343L);
         Assertions.assertThat(accountDto.getBalance()).isEqualTo(account.getBalance());
     }
 
     @Test(expected = NoSuchAccountException.class)
     public void printStatement_should_throw_exception_for_no_such_account() throws NoSuchAccountException {
-        when(bankAccountRepository.findById(anyString())).thenReturn(Optional.empty());
+        when(bankAccountRepository.findById(anyLong())).thenReturn(Optional.empty());
         bankAccountService.printStatement(12343L);
         Assert.fail("should have thrown NoSuchAccountException ");
     }
     @Test
     public void listAllOperations_should_successfully_return_all_account_operations() throws NoSuchAccountException {
-        when(bankAccountRepository.findById("12343")).thenReturn(Optional.of(account));
+        when(bankAccountRepository.findById(12343L)).thenReturn(Optional.of(account));
         List<OperationDTO> operations = bankAccountService.listAllOperations(12343L);
         Assertions.assertThat(operations).isNotEmpty();
         assertEquals(operations.size(), account.getOperations().size());
     }
     @Test(expected = NoSuchAccountException.class)
     public void listAllOperations_should_throw_exception_for_no_such_account() throws NoSuchAccountException {
-        when(bankAccountRepository.findById(anyString())).thenReturn(Optional.empty());
+        when(bankAccountRepository.findById(anyLong())).thenReturn(Optional.empty());
         bankAccountService.listAllOperations(12343L);
         Assert.fail("should have thrown NoSuchAccountException ");
     }
