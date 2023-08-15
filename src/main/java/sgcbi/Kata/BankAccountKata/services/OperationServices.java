@@ -75,7 +75,7 @@ public class OperationServices {
         }
         Account account = optionalBankAccount.get();
         if (amount<0) throw new AmountNegativeExeption("le montant ne doit pas etre negative");
-        if (operationType.equals(OperationType.DEPOSIT)&&account.getBalance()<amount) throw new BalanceNotSufficentExeption("le montant est inssufisant=>"+account.getBalance());
+        if (operationType.equals(OperationType.WITHDRAW)&&account.getBalance()<amount) throw new BalanceNotSufficentExeption("le montant est inssufisant=>"+account.getBalance());
 
 
 
